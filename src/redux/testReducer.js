@@ -1,5 +1,6 @@
 const initialState = {
     test: 'test value',
+    messages : ["string"]
 };
 
 const testReducer = (state = initialState, action) => {
@@ -8,6 +9,16 @@ const testReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 test: action.test
             });
+        case 'LOAD_MESSAGES':
+        return Object.assign({}, state, {
+            messages: action.messages,
+        });
+        case 'IMPORT_MESSAGE':
+        const newMessages = state.messages.slice(0);
+        newMessages.unshift(action.message);
+        return Object.assign({}, state, {
+            messages: newMessages,
+        })
         default:
             return state;
     }
