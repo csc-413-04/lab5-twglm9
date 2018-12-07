@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom';
-//import {loadAllMessages} from './redux/actions';
 import axios from 'axios';
-import {loadAllMessages} from './redux/actions';
+import {loadAllMessages}
+    from './redux/actions';
 
-//axios.defaults.withCredentials = true;
+
+
 class Message extends Component {
     render() {
         return (
             <div className="message">
                 {this.props.content}
             </div>
-        )
+        );
     }
 }
 
@@ -22,7 +23,7 @@ class HomePage extends Component {
         this.sendSomeData = this.sendSomeData.bind(this);
         this.updateMessage = this.updateMessage.bind(this);
         this.state = {
-            content: null, //Initial content
+            content: null,
             messageValue: '',
         };
     }
@@ -30,44 +31,52 @@ class HomePage extends Component {
     updateMessage(e) {
         this.setState({
             messageValue: e.target.value,
-        })
+        });
     }
 
     sendSomeData() {
-        axios(
-            {
-                method: 'POST',
-                url: '/api/sendmessage',
-                data:
+        axios ({
+            method: 'POST',
+            url: '/api/sendmessage',
+            data: {
+                message: this.state.messageValue
             }
-        )
+        })
+        .then((res) => {
+            console.log(res)
+        }).catch((e) => {
+            //this is an async catch
+            console.log(e);
+        });
+        this.setState({
+            messageValue: '',
+        })
+        
     }
 
     componentDidMount() {
-        //this is the url of where your spark
+        //this is the url of where tour spark server is
         //load up initial messages
         axios.get('/api/messages')
         .then((res) => {
             console.log(res.data)
             this.props.loadAllMessages(res.data);
         }).catch((e) => {
-            //this is an async catch
             console.log(e);
         })
     }
-
+    
     render() {
         return (
             <div className="content-area">
-            {this.state.content}
-                <div classname="messages">
+                {this.state.content}
+                <div className="messages">
                 {
-                    //JSON.stringify(this.props.messages)
                     this.props.messages.map((messageData, i) => <Message key={i} content={messageData}/>)
                 }
                 </div>
                 <input value={this.state.messageValue} onChange={this.updateMessage}/>
-                <button onClick={this.sendSomeData}>Send Some Post Data</button>
+                <button onClick={this.sendSomeData}>Send some post data</button>
             </div>
         );
     }
@@ -78,7 +87,6 @@ const mapStateToProps = (state, ownProps) => {
         messages : state.testReducer.messages,
     };
 };
-
 
 const mapDispatchToProps = {loadAllMessages};
 

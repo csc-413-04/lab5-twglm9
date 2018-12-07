@@ -6,10 +6,9 @@ export const doTest = () => ({
 export const loadAllMessages = (messages) => ({
     type: 'LOAD_MESSAGES',
     messages,
-});
+})
 
 export const importMessage = (message) => ({
-
     type: 'IMPORT_MESSAGE',
     message,
 })
